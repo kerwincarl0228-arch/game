@@ -1,0 +1,718 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brain Quest - Educational Game</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 15px;
+  background:
+    radial-gradient(circle at top left, #60a5fa, transparent 35%),
+    radial-gradient(circle at bottom right, #a78bfa, transparent 35%),
+    linear-gradient(135deg, #0f172a, #1e3a8a);
+  color: #222;
+}
+
+/* HEADER */
+.header {
+  padding: 30px;
+  text-align: center;
+  background: linear-gradient(135deg,#ffffff,#dbeafe);
+  border-radius: 15px;
+  box-shadow: 0 5px 20px #0003;
+}
+
+.logo {
+  width: 85px;
+  height: 85px;
+  margin: auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#2563eb,#7c3aed);
+  color: white;
+  font-size: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid white;
+  box-shadow: 0 4px 12px #0003;
+}
+
+.header h1 {
+  font-size: 38px;
+  color: #1e3a8a;
+  margin: 12px 0 5px;
+}
+
+.header p {
+  color: #475569;
+}
+
+/* NAVIGATION */
+.topnav {
+  overflow: hidden;
+  background: #172554;
+  border-radius: 10px;
+  margin-top: 12px;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 15px 20px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.topnav a:hover {
+  background: #60a5fa;
+  color: #172554;
+}
+
+/* COLUMNS */
+.leftcolumn {
+  float: left;
+  width: 70%;
+}
+
+.rightcolumn {
+  float: left;
+  width: 30%;
+  padding-left: 15px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  margin-top: 18px;
+  border-radius: 14px;
+  box-shadow: 0 5px 15px #0002;
+}
+
+/* SUBJECT CARDS */
+.subjects {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 15px;
+}
+
+.subject {
+  padding: 22px 10px;
+  text-align: center;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: .3s;
+}
+
+.subject:hover {
+  transform: translateY(-5px);
+  border-color: #2563eb;
+}
+
+.subject h3 {
+  margin: 8px 0;
+}
+
+.math {background:#dbeafe;}
+.english {background:#dcfce7;}
+.filipino {background:#ffedd5;}
+.ap {background:#f3e8ff;}
+
+.subject-icon {
+  font-size: 40px;
+}
+
+/* GAME */
+#game {
+  display: none;
+}
+
+#question {
+  font-size: 21px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.choice {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin: 10px 0;
+  border: 2px solid #cbd5e1;
+  background: white;
+  border-radius: 9px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 16px;
+}
+
+.choice:hover:not(:disabled) {
+  background: #dbeafe;
+  border-color: #2563eb;
+}
+
+.choice:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.correct {
+  background: #bbf7d0 !important;
+  border-color: #16a34a !important;
+}
+
+.wrong {
+  background: #fecaca !important;
+  border-color: #dc2626 !important;
+}
+
+button {
+  font-family: Arial;
+}
+
+.mainbtn {
+  padding: 13px 25px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 12px;
+}
+
+.mainbtn:hover {
+  background: #1e40af;
+}
+
+#feedback {
+  font-weight: bold;
+  margin-top: 15px;
+  min-height: 24px;
+}
+
+.progress {
+  height: 12px;
+  background: #e2e8f0;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: #2563eb;
+  transition: .3s;
+}
+
+#result {
+  display: none;
+  text-align: center;
+}
+
+/* RIGHT COLUMN */
+.fakeimg {
+  background: linear-gradient(135deg,#bfdbfe,#ddd6fe);
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 40px;
+}
+
+.info {
+  line-height: 1.8;
+}
+
+/* FOOTER */
+.footer {
+  padding: 22px;
+  text-align: center;
+  background: #172554;
+  color: white;
+  margin-top: 20px;
+  border-radius: 12px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* RESPONSIVE */
+@media screen and (max-width:800px) {
+  .leftcolumn,.rightcolumn {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+@media screen and (max-width:500px) {
+  .header h1 {
+    font-size: 27px;
+  }
+
+  .topnav a {
+    float: none;
+    width: 100%;
+  }
+
+  .subjects {
+    grid-template-columns: 1fr;
+  }
+
+  body {
+    padding: 8px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header" id="home">
+
+  <div class="logo">🧠</div>
+
+  <h1>BRAIN QUEST</h1>
+
+  <p>Learn, Play and Challenge Your Knowledge!</p>
+
+  <strong>EDUCATIONAL QUIZ GAME</strong>
+
+</div>
+
+<!-- NAVIGATION -->
+<div class="topnav">
+  <a href="#home">🏠 Home</a>
+  <a href="#subjects">📚 Subjects</a>
+  <a href="#game">🎮 Play Game</a>
+  <a href="#about">ℹ️ About</a>
+</div>
+
+<div class="row">
+
+<!-- LEFT COLUMN -->
+<div class="leftcolumn">
+
+  <div class="card" id="subjects">
+
+    <h2>🎯 Choose Your Subject</h2>
+
+    <p>Select a subject to begin your challenge!</p>
+
+    <div class="subjects">
+
+      <div class="subject math"
+      onclick="startGame('Math')">
+        <div class="subject-icon">➗</div>
+        <h3>MATHEMATICS</h3>
+        <p>Test your math skills!</p>
+      </div>
+
+      <div class="subject english"
+      onclick="startGame('English')">
+        <div class="subject-icon">📚</div>
+        <h3>ENGLISH</h3>
+        <p>Grammar and vocabulary!</p>
+      </div>
+
+      <div class="subject filipino"
+      onclick="startGame('Filipino')">
+        <div class="subject-icon">🇵🇭</div>
+        <h3>FILIPINO</h3>
+        <p>Wika at panitikan!</p>
+      </div>
+
+      <div class="subject ap"
+      onclick="startGame('AP')">
+        <div class="subject-icon">🌏</div>
+        <h3>ARALING PANLIPUNAN</h3>
+        <p>Kasaysayan at kultura!</p>
+      </div>
+
+    </div>
+
+    <button class="mainbtn"
+    onclick="startGame('All')">
+      START ALL SUBJECTS 🚀
+    </button>
+
+  </div>
+
+  <!-- GAME AREA -->
+  <div class="card" id="game">
+
+    <h2 id="subjectTitle">BRAIN QUEST</h2>
+
+    <p id="questionNumber">Question 1 of 20</p>
+
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+
+    <div id="question"></div>
+
+    <div id="choices"></div>
+
+    <p id="feedback"></p>
+
+    <button class="mainbtn"
+    id="nextBtn"
+    onclick="nextQuestion()"
+    style="display:none">
+      NEXT QUESTION ➜
+    </button>
+
+    <button class="mainbtn"
+    onclick="backToSubjects()">
+      BACK TO SUBJECTS
+    </button>
+
+  </div>
+
+  <!-- RESULT -->
+  <div class="card" id="result">
+
+    <h2>🏆 GAME COMPLETED!</h2>
+
+    <h1 id="finalScore"></h1>
+
+    <p id="message"></p>
+
+    <button class="mainbtn"
+    onclick="startGame(currentSubject)">
+      PLAY AGAIN 🔄
+    </button>
+
+    <button class="mainbtn"
+    onclick="backToSubjects()">
+      CHOOSE SUBJECT
+    </button>
+
+  </div>
+
+  <!-- ABOUT -->
+  <div class="card" id="about">
+
+    <h2>📖 About Brain Quest</h2>
+
+    <p>
+      Brain Quest is an educational quiz game
+      designed to help students improve their
+      knowledge in Mathematics, English,
+      Filipino and Araling Panlipunan.
+    </p>
+
+    <p>
+      Learn while having fun! Challenge yourself,
+      answer questions and discover how much
+      knowledge you have.
+    </p>
+
+  </div>
+
+</div>
+
+<!-- RIGHT COLUMN -->
+<div class="rightcolumn">
+
+  <div class="card">
+
+    <h2>🧠 Game Logo</h2>
+
+    <div class="fakeimg">🧠</div>
+
+    <h3>BRAIN QUEST</h3>
+
+    <p>Knowledge is the key to success!</p>
+
+  </div>
+
+  <div class="card">
+
+    <h3>📌 Game Information</h3>
+
+    <div class="info">
+      <p>🎮 Game: Brain Quest</p>
+      <p>📚 Subjects: 4</p>
+      <p>❓ Questions: 20</p>
+      <p>⭐ Scoring: 1 point each</p>
+      <p>🏆 Goal: Get a perfect score!</p>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <h3>💡 Tips</h3>
+
+    <p>✔ Read every question carefully.</p>
+    <p>✔ Choose the correct answer.</p>
+    <p>✔ Try your best!</p>
+    <p>✔ Enjoy learning!</p>
+
+  </div>
+
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+
+  <h2>🧠 BRAIN QUEST</h2>
+
+  <p>contact: 09936583763</p>
+
+  <p><address>looc hood</address></p>
+
+  <p>gil@gmail.com</p>
+
+</div>
+
+
+<script>
+
+// QUESTIONS DATABASE
+const questions = [
+
+{subject:"Math",q:"What is 25 + 15?",a:["30","40","45","50"],correct:1},
+{subject:"Math",q:"What is 12 x 5?",a:["50","55","60","65"],correct:2},
+{subject:"Math",q:"What is 100 divided by 4?",a:["20","25","30","40"],correct:1},
+{subject:"Math",q:"What is the square of 9?",a:["18","72","81","90"],correct:2},
+{subject:"Math",q:"What is 75 - 28?",a:["47","45","48","57"],correct:0},
+
+{subject:"English",q:"What is the plural of 'Child'?",a:["Childs","Children","Childes","Childrens"],correct:1},
+{subject:"English",q:"Which word is a noun?",a:["Run","Beautiful","Teacher","Quickly"],correct:2},
+{subject:"English",q:"What is the opposite of 'Happy'?",a:["Glad","Sad","Excited","Joyful"],correct:1},
+{subject:"English",q:"Choose the correct sentence.",a:["She go to school.","She goes to school.","She going school.","She gone school."],correct:1},
+{subject:"English",q:"What is the past tense of 'Eat'?",a:["Eated","Eating","Ate","Eats"],correct:2},
+
+{subject:"Filipino",q:"Ano ang pambansang wika ng Pilipinas?",a:["English","Filipino","Spanish","Japanese"],correct:1},
+{subject:"Filipino",q:"Ano ang kasingkahulugan ng salitang masaya?",a:["Malungkot","Maligaya","Galit","Takot"],correct:1},
+{subject:"Filipino",q:"Ano ang kasalungat ng mataas?",a:["Malaki","Mahaba","Mababa","Maliit"],correct:2},
+{subject:"Filipino",q:"Sino ang sumulat ng Noli Me Tangere?",a:["Andres Bonifacio","Jose Rizal","Apolinario Mabini","Emilio Jacinto"],correct:1},
+{subject:"Filipino",q:"Ano ang tawag sa salitang naglalarawan?",a:["Pangngalan","Pandiwa","Pang-uri","Panghalip"],correct:2},
+
+{subject:"AP",q:"Ano ang kabisera ng Pilipinas?",a:["Cebu","Davao","Manila","Laguna"],correct:2},
+{subject:"AP",q:"Sino ang pambansang bayani ng Pilipinas?",a:["Jose Rizal","Emilio Aguinaldo","Lapu-Lapu","Andres Bonifacio"],correct:0},
+{subject:"AP",q:"Kailan ipinagdiriwang ang Araw ng Kalayaan?",a:["Hunyo 12","Hulyo 4","Agosto 21","Disyembre 30"],correct:0},
+{subject:"AP",q:"Ano ang pinakamalaking pulo sa Pilipinas?",a:["Mindanao","Luzon","Samar","Palawan"],correct:1},
+{subject:"AP",q:"Ilang bituin ang nasa watawat ng Pilipinas?",a:["2","3","4","5"],correct:1}
+
+];
+
+let selectedQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let currentSubject = "All";
+
+// START GAME
+function startGame(subject) {
+
+  currentSubject = subject;
+
+  if(subject === "All") {
+    selectedQuestions = [...questions];
+  } else {
+    selectedQuestions = questions.filter(
+      item => item.subject === subject
+    );
+  }
+
+  currentIndex = 0;
+  score = 0;
+
+  document.getElementById("subjects").style.display = "none";
+  document.getElementById("about").style.display = "none";
+  document.getElementById("result").style.display = "none";
+  document.getElementById("game").style.display = "block";
+
+  showQuestion();
+
+  document.getElementById("game").scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+// DISPLAY QUESTION
+function showQuestion() {
+
+  answered = false;
+
+  const item = selectedQuestions[currentIndex];
+
+  document.getElementById("subjectTitle").innerText =
+    item.subject === "AP" ? "ARALING PANLIPUNAN" : item.subject.toUpperCase();
+
+  document.getElementById("questionNumber").innerText =
+    "Question " + (currentIndex+1) +
+    " of " + selectedQuestions.length;
+
+  document.getElementById("progressBar").style.width =
+    ((currentIndex / selectedQuestions.length)*100) + "%";
+
+  document.getElementById("question").innerText =
+    item.q;
+
+  document.getElementById("feedback").innerText = "";
+
+  document.getElementById("nextBtn").style.display = "none";
+
+  const choices = document.getElementById("choices");
+
+  choices.innerHTML = "";
+
+  item.a.forEach((answer,index) => {
+
+    let btn = document.createElement("button");
+
+    btn.className = "choice";
+
+    btn.innerText =
+      String.fromCharCode(65+index) + ". " + answer;
+
+    btn.onclick = () => checkAnswer(index,btn);
+
+    choices.appendChild(btn);
+
+  });
+
+}
+
+// CHECK ANSWER
+function checkAnswer(index,button) {
+
+  if(answered) return;
+
+  answered = true;
+
+  const item = selectedQuestions[currentIndex];
+
+  const allButtons =
+    document.querySelectorAll(".choice");
+
+  allButtons.forEach((btn,i) => {
+
+    btn.disabled = true;
+
+    if(i === item.correct) {
+      btn.classList.add("correct");
+    }
+
+  });
+
+  if(index === item.correct) {
+
+    score++;
+
+    document.getElementById("feedback").innerText =
+      "✅ Correct! Great job!";
+
+    document.getElementById("feedback").style.color =
+      "green";
+
+  } else {
+
+    button.classList.add("wrong");
+
+    document.getElementById("feedback").innerText =
+      "❌ Incorrect! The correct answer is " +
+      item.a[item.correct];
+
+    document.getElementById("feedback").style.color =
+      "red";
+
+  }
+
+  document.getElementById("nextBtn").style.display =
+    "inline-block";
+
+}
+
+// NEXT QUESTION
+function nextQuestion() {
+
+  currentIndex++;
+
+  if(currentIndex < selectedQuestions.length) {
+
+    showQuestion();
+
+  } else {
+
+    showResult();
+
+  }
+
+}
+
+// SHOW RESULT
+function showResult() {
+
+  document.getElementById("game").style.display = "none";
+
+  document.getElementById("result").style.display = "block";
+
+  document.getElementById("progressBar").style.width = "100%";
+
+  document.getElementById("finalScore").innerText =
+    score + " / " + selectedQuestions.length;
+
+  let message = "";
+
+  let percentage = (score / selectedQuestions.length) * 100;
+
+  if(percentage === 100) {
+    message = "🏆 PERFECT SCORE! Excellent work!";
+  } else if(percentage >= 80) {
+    message = "🌟 Great job! You are amazing!";
+  } else if(percentage >= 60) {
+    message = "👏 Good work! Keep practicing!";
+  } else {
+    message = "💪 Don't give up! Try again!";
+  }
+
+  document.getElementById("message").innerText =
+    message;
+
+  document.getElementById("result").scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+// BACK TO SUBJECTS
+function backToSubjects() {
+
+  document.getElementById("game").style.display = "none";
+  document.getElementById("result").style.display = "none";
+
+  document.getElementById("subjects").style.display = "block";
+  document.getElementById("about").style.display = "block";
+
+  document.getElementById("subjects").scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+</script>
+
+</body>
+</html>
